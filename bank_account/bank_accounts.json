@@ -1,0 +1,28 @@
+[
+  {
+    "account_holder": "iyan",
+    "balance": 600000000.0,
+    "is_locked": false,
+    "account_history": [
+      "Transfer: Rp.200000000.0 ke rafli",
+      "Penarikan: Rp.100000000.0",
+      "Akun terkunci.",
+      "Akun terkunci.",
+      "Akun dibuka."
+    ]
+  },
+  {
+    "account_holder": "aldino",
+    "balance": 250000000.0,
+    "is_locked": false,
+    "account_history": []
+  },
+  {
+    "account_holder": "rafli",
+    "balance": 500000000.0,
+    "is_locked": false,
+    "account_history": [
+      "Deposit: Rp.200000000.0"
+    ]
+  }
+]
