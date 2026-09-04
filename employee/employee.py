@@ -96,3 +96,4 @@ if __name__ == "__main__":
     print(f'Total Bonus: {total_bonus:,.2f}')
     max_bonus = max(emp.hitung_bonus() for emp in employees)
     print(f'Bonus Terbesar: {max_bonus:,.2f}')
+

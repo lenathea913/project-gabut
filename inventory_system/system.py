@@ -1,4 +1,4 @@
-from exception import ProductNotAvailableError
+from .exception import ProductNotAvailableError
 import json
 import os
 class Product:
@@ -36,6 +36,12 @@ class Inventory:
             json.dump([vars(produk) for produk in self.products], file)
     
     def tambah_produk(self, nama, harga, stok):
+        if not nama or len(nama.strip()) == 0:
+            print('Nama tidak boleh kosong.')
+        if harga <= 0:
+            print('Harga tidak boleh negatif.')
+        if stok <= 0:
+            print('Stok tidak boleh negatif.')
         produk_baru = Product(nama, harga, stok)
         self.products.append(produk_baru)
         self.save_data()
@@ -48,10 +54,10 @@ class Inventory:
                     produk.stok -= jumlah
                     self.save_data()
                     print(f'Stok produk {nama} berhasil dikurangi sebanyak {jumlah}.')
+                    return
                 else:
                     raise ProductNotAvailableError(f'Stok produk {nama} tidak mencukupi.')
-            else:
-                raise ProductNotAvailableError(f'Produk {nama} tidak ditemukan dalam inventaris.')
+        raise ProductNotAvailableError(f'Produk {nama} tidak ditemukan dalam inventaris.')
     
     def cari_produk(self, nama):
         for produk in self.products:
@@ -67,6 +73,21 @@ class Inventory:
             for produk in self.products:
                 print(f'Nama: {produk.nama:10} | Harga: {produk.harga:10,.0f} | Stok: {produk.stok:10,.0f}')
         
+    def update_harga(self, nama, harga_baru):
+        if harga_baru <= 0:
+            raise ValueError('Harga tidak boleh negatif.')
+        produk = self.cari_produk(nama)
+        produk.harga = harga_baru
+        self.save_data()
+        print(f'Harga produk {nama} berhasil diupdate.')
+    
+    def update_stok(self, nama, stok_baru):
+        if stok_baru <= 0:
+            raise ValueError('Stok tidak boleh negatif.')
+        produk = self.cari_produk(nama)
+        produk.stok += stok_baru
+        self.save_data()
+        print(f'Stok produk {nama} berhasil diupdate.')
 
 if __name__ == "__main__":
     while True:
@@ -78,9 +99,10 @@ if __name__ == "__main__":
         print('2. Kurangi Stok')
         print('3. Cari Produk')
         print('4. Lihat Gudang')
-        print('5. Keluar')
+        print('5. Update Harga Produk')
+        print('6. Update Stok Produk')
         
-        user = input('Masukkan pilihan (1-5): ')
+        user = input('Masukkan pilihan (q to quit): ').lower()
         
         if user == '1':
             nama = input('Masukkan nama produk: ')
@@ -112,9 +134,27 @@ if __name__ == "__main__":
             inventory.lihat_gudang()
         
         elif user == '5':
+            nama = input('Masukkan nama produk: ').lower()
+            harga_baru = float(input('Masukkan Harga baru: '))
+            inventory = Inventory()
+            try:
+                inventory.update_harga(nama, harga_baru)
+            except ProductNotAvailableError as e:
+                print(e)
+        
+        elif user == '6':
+            nama = input('Masukkan nama produk: ').lower()
+            stok_baru = int(input('Masukkan stok baru: '))
+            inventory = Inventory()
+            try:
+                inventory.update_stok(nama, stok_baru)
+            except ProductNotAvailableError as e:
+                print(e)
+        
+        elif user == 'q':
             print('Terima kasih telah menggunakan program ini.')
             break
             
         else:
-            print('Pilihan tidak valid. Silakan pilih antara 1-4.')
+            print('Pilihan tidak valid. Silakan pilih antara 1-6.')
     
